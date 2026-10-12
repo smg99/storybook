@@ -1,3 +1,8 @@
+## 11.0.0-alpha.7
+
+- Core: Fix autodocs, preset resolution, and React manifest matching - [#36642](https://github.com/storybookjs/storybook/pull/36642), thanks @valentinpalkovic!
+- Manager: Remove persisted tag-filter state migration [SB-2022] - [#36678](https://github.com/storybookjs/storybook/pull/36678), thanks @obvious-autobuild!
+
 ## 11.0.0-alpha.6
 
 - Addon Docs: Map CSF plugin sourcemaps to the transform input - [#36463](https://github.com/storybookjs/storybook/pull/36463), thanks @mnkprs!
