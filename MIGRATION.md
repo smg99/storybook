@@ -8,6 +8,7 @@
   - [`viewport.defaultViewport` parameter and `responsiveViewport` removed](#viewportdefaultviewport-parameter-and-responsiveviewport-removed)
   - [`parameters.componentSubtitle` removed](#parameterscomponentsubtitle-removed)
   - [`argTypes` `defaultValue` removed](#argtypes-defaultvalue-removed)
+  - [Toolbar `globalTypes` entries: index signature and `defaultValue` removed](#toolbar-globaltypes-entries-index-signature-and-defaultvalue-removed)
   - [Docs Code panel enabled by default](#docs-code-panel-enabled-by-default)
   - [`argTypes` removed from loaders, `beforeEach`, `play` and `afterEach`](#argtypes-removed-from-loaders-beforeeach-play-and-aftereach)
   - [`docgenServer` is stable and enabled by default](#docgenserver-is-stable-and-enabled-by-default)
@@ -752,9 +753,45 @@ export default {
 };
 ```
 
-`table.defaultValue` and `globalTypes.defaultValue` are unchanged.
+`table.defaultValue` is unchanged. The `defaultValue` property on toolbar `globalTypes` entries is removed, see [Toolbar `globalTypes` entries: index signature and `defaultValue` removed](#toolbar-globaltypes-entries-index-signature-and-defaultvalue-removed).
 
 The `argtypes-default-value` automigration deletes a static `argTypes.<name>.defaultValue` when you upgrade, or when you run `npx storybook automigrate argtypes-default-value`. It does not copy the value anywhere. An explicit `args` value stays as it is. When that property cannot be removed, the file is left unchanged and listed in `automigrations-summary.md`.
+
+### Toolbar `globalTypes` entries: index signature and `defaultValue` removed
+
+Toolbar entries in `globalTypes` no longer allow extra, undocumented keys. The loose index signature that accepted them existed only for compatibility with `InputType` and is now removed, so an unknown key in a toolbar entry is a type error. Move any extra data out of the toolbar entry:
+
+```diff
+export default {
+  globalTypes: {
+    locale: {
+      description: 'Internationalization locale',
+      toolbar: { items: ['en', 'es'] },
+-     myAddonData: { timezone: 'CET' },
+    },
+  },
+};
+```
+
+The `defaultValue` property on a toolbar entry is removed as well. It has not been read since Storybook 9.0, when the global's starting value moved to `initialGlobals`. Set `initialGlobals` instead:
+
+```diff
+// .storybook/preview.js
+export default {
++ initialGlobals: {
++   locale: 'en',
++ },
+  globalTypes: {
+    locale: {
+      description: 'Internationalization locale',
+-     defaultValue: 'en',
+      toolbar: { items: ['en', 'es'] },
+    },
+  },
+};
+```
+
+See [From version 8.x to 9.0.0](#from-version-8x-to-900) for details on the `initialGlobals` change.
 
 ### Docs Code panel enabled by default
 
